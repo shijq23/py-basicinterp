@@ -3,11 +3,12 @@
 
 import basiclang.basic
 
-while True:
-    text = input("basic > ")
-    ast, error = basiclang.basic.run('<stdin>', text)
+if __name__ == '__main__':
+    while True:
+        text = input("basic > ")
+        ast, error = basiclang.basic.run('<stdin>', text)
 
-    if error:
-        print(error.as_str())
-    else:
-        print(ast)
+        if error:
+            print(error.as_str())
+        else:
+            print(ast)
