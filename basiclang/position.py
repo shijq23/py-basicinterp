@@ -3,15 +3,16 @@
 
 from __future__ import annotations
 
+
 class Position:
-    def __init__(self, idx:int, ln:int, col:int, fn:str, ftxt:str) -> None:
+    def __init__(self, idx: int, ln: int, col: int, fn: str, ftxt: str) -> None:
         self.idx = idx
         self.ln = ln
         self.col = col
         self.fn = fn
         self.ftxt = ftxt
 
-    def advance(self, cur_char:str) -> Position:
+    def advance(self, cur_char: str) -> Position:
         self.idx += 1
         self.col += 1
 

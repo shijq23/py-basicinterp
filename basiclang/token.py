@@ -14,8 +14,9 @@ TT_DIV = 'DIV'
 TT_LPAREN = 'LPAREN'
 TT_RPAREN = 'RPAREN'
 
+
 class Token:
-    def __init__(self, type_, value_=None) -> None:
+    def __init__(self, type_: str, value_=None) -> None:
         self.type = type_
         self.value = value_
 
