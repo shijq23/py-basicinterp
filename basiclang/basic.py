@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import annotations
-
 from typing import List, Tuple
 
-from .error import Error
-from .token import Token
-from .lexer import Lexer
-from .parser import Parser
-
+from basiclang.error import Error
+from basiclang.token import Token
+from basiclang.lexer import Lexer
+from basiclang.parser import Parser
+from basiclang.interpreter import Interpreter
 
 def run(fn: str, text: str) -> Tuple[List[Token], Error]:
     lexer = Lexer(fn, text)
@@ -19,4 +18,8 @@ def run(fn: str, text: str) -> Tuple[List[Token], Error]:
 
     parser = Parser(tokens)
     ast = parser.parse()
-    return ast.node, ast.error
+    if ast.error: return None, ast.error
+
+    interpretor = Interpreter()
+    res = interpretor.visit(ast.node)
+    return res.value, res.error
