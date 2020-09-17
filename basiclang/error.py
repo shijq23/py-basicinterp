@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from basiclang.context import Context
 from basiclang.strings_with_arrows import string_with_arrows
 from basiclang.position import Position
 
@@ -33,5 +34,24 @@ class InvalidSyntaxError(Error):
 
 
 class RTError(Error):
-    def __init__(self, pos_start: Position, pos_end: Position, details: str) -> None:
+    def __init__(self, pos_start: Position, pos_end: Position, details: str, context: Context) -> None:
         super().__init__(pos_start, pos_end, 'Runtime Error', details)
+        self.context = context
+
+    def as_string(self) -> str:
+        result = self.generate_traceback()
+        result += f'{self.error_name}: {self.details}\n'
+        result += '\n\n' + \
+            string_with_arrows(self.pos_start.ftxt,
+                               self.pos_start, self.pos_end)
+        return result
+
+    def generate_traceback(self):
+        result = ''
+        pos = self.pos_start
+        ctx = self.context
+        while ctx:
+            result = f' File {pos.fn}, line {str(pos.ln +1)}, in {ctx.display_name}\n' + result
+            pos = ctx.parant_entry_pos
+            ctx = ctx.parent
+        return 'Tracebak (most recent call last):\n' + result

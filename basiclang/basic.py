@@ -8,7 +8,7 @@ from basiclang.error import Error
 from basiclang.token import Token
 from basiclang.lexer import Lexer
 from basiclang.parser import Parser
-from basiclang.interpreter import Interpreter
+from basiclang.interpreter import Context, Interpreter
 
 def run(fn: str, text: str) -> Tuple[List[Token], Error]:
     lexer = Lexer(fn, text)
@@ -21,5 +21,6 @@ def run(fn: str, text: str) -> Tuple[List[Token], Error]:
     if ast.error: return None, ast.error
 
     interpretor = Interpreter()
-    res = interpretor.visit(ast.node)
+    context = Context('<program>')
+    res = interpretor.visit(ast.node, context)
     return res.value, res.error
