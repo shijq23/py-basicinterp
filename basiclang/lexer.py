@@ -4,7 +4,7 @@
 from __future__ import annotations
 from typing import List, Tuple
 
-from .token import DIGITS
+from .token import DIGITS, TT_EOF
 from .token import TT_PLUS
 from .token import TT_MINUS
 from .token import TT_MUL
@@ -40,34 +40,35 @@ class Lexer:
             elif self.cur_char in DIGITS + '.':
                 tokens.append(self.make_number())
             elif self.cur_char == '+':
-                tokens.append(Token(TT_PLUS))
+                tokens.append(Token(TT_PLUS, pos_start=self.pos))
                 self.advance()
             elif self.cur_char == '-':
-                tokens.append(Token(TT_MINUS))
+                tokens.append(Token(TT_MINUS, pos_start=self.pos))
                 self.advance()
             elif self.cur_char == '*':
-                tokens.append(Token(TT_MUL))
+                tokens.append(Token(TT_MUL, pos_start=self.pos))
                 self.advance()
             elif self.cur_char == '/':
-                tokens.append(Token(TT_DIV))
+                tokens.append(Token(TT_DIV, pos_start=self.pos))
                 self.advance()
             elif self.cur_char == '(':
-                tokens.append(Token(TT_LPAREN))
+                tokens.append(Token(TT_LPAREN, pos_start=self.pos))
                 self.advance()
             elif self.cur_char == ')':
-                tokens.append(Token(TT_RPAREN))
+                tokens.append(Token(TT_RPAREN, pos_start=self.pos))
                 self.advance()
             else:
                 pos_start = self.pos.copy()
                 char = self.cur_char
                 self.advance()
                 return [], IllegalCharError(pos_start, self.pos, "'" + char + "'")
-
+        tokens.append(Token(TT_EOF, pos_start=self.pos))
         return tokens, None
 
     def make_number(self) -> Token:
         num_str = ''
         dot_count = 0
+        pos_start = self.pos.copy()
 
         while self.cur_char != None and self.cur_char in DIGITS + '.':
             if self.cur_char == '.':
@@ -78,6 +79,6 @@ class Lexer:
             self.advance()
 
         if dot_count == 0:
-            return Token(TT_INT, int(num_str))
+            return Token(TT_INT, int(num_str), pos_start, self.pos)
         else:
-            return Token(TT_FLOAT, float(num_str))
+            return Token(TT_FLOAT, float(num_str), pos_start, self.pos)

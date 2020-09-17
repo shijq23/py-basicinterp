@@ -12,7 +12,7 @@ class Position:
         self.fn = fn
         self.ftxt = ftxt
 
-    def advance(self, cur_char: str) -> Position:
+    def advance(self, cur_char: str = None) -> Position:
         self.idx += 1
         self.col += 1
 

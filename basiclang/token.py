@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import annotations
+from basiclang.position import Position
 
 DIGITS = '0123456789'
 
@@ -13,12 +14,18 @@ TT_MUL = 'MUL'
 TT_DIV = 'DIV'
 TT_LPAREN = 'LPAREN'
 TT_RPAREN = 'RPAREN'
+TT_EOF = 'EOF'
 
 
 class Token:
-    def __init__(self, type_: str, value_=None) -> None:
+    def __init__(self, type_: str, value_=None, pos_start: Position = None, pos_end: Position = None) -> None:
         self.type = type_
         self.value = value_
+        if pos_start:
+            self.pos_start = pos_start.copy()
+            self.pos_end = pos_start.copy().advance()
+        if pos_end:
+            self.pos_end = pos_end.copy()
 
     def __repr__(self) -> str:
         if self.value:

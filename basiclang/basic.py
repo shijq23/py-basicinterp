@@ -19,4 +19,4 @@ def run(fn: str, text: str) -> Tuple[List[Token], Error]:
 
     parser = Parser(tokens)
     ast = parser.parse()
-    return ast, None
+    return ast.node, ast.error
