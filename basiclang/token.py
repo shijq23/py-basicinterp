@@ -15,6 +15,7 @@ TT_DIV = 'DIV'
 TT_LPAREN = 'LPAREN'
 TT_RPAREN = 'RPAREN'
 TT_EOF = 'EOF'
+TT_POW = 'TT_POW'
 
 
 class Token:

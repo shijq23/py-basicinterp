@@ -4,7 +4,7 @@
 from __future__ import annotations
 from typing import List, Tuple
 
-from .token import DIGITS, TT_EOF
+from .token import DIGITS, TT_EOF, TT_POW
 from .token import TT_PLUS
 from .token import TT_MINUS
 from .token import TT_MUL
@@ -56,6 +56,9 @@ class Lexer:
                 self.advance()
             elif self.cur_char == ')':
                 tokens.append(Token(TT_RPAREN, pos_start=self.pos))
+                self.advance()
+            elif self.cur_char == '^':
+                tokens.append(Token(TT_POW, pos_start=self.pos))
                 self.advance()
             else:
                 pos_start = self.pos.copy()

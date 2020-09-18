@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from __future__ import annotations
+import math
 from basiclang.context import Context
 from basiclang.error import Error, RTError
-from basiclang.token import TT_DIV, TT_MINUS, TT_MUL, TT_PLUS
+from basiclang.token import TT_DIV, TT_MINUS, TT_MUL, TT_PLUS, TT_POW
 
 from basiclang.position import Position
 from basiclang.node import BinOpNode, NumberNode
@@ -54,6 +55,13 @@ class Number:
     def mul(self, other) -> Number:
         if isinstance(other, Number):
             return Number(self.value * other.value).set_context(self.context), None
+    
+    def pow(self, other) -> Number:
+        if isinstance(other, Number):
+            if isinstance(self.value, int) and isinstance(other.value, int):
+                return Number(self.value ** other.value).set_context(self.context), None
+            else:
+                return Number(math.pow(self.value, other.value)).set_context(self.context), None
 
     def div(self, other) -> Number:
         if isinstance(other, Number):
@@ -95,6 +103,8 @@ class Interpreter:
             result, error = left.mul(right)
         elif node.op_tok.type == TT_DIV:
             result, error = left.div(right)
+        elif node.op_tok.type == TT_POW:
+            result, error = left.pow(right)
         else:
             pass
         if error:
