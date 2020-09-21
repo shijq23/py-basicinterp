@@ -1,4 +1,5 @@
-expr : term ((PLUS|MINUS) term)*
+expr : KEYWORD:VAR IDENTIFIER EQ expr
+     : term ((PLUS|MINUS) term)*
 
 term : factor ((MUL|DIV) factor)*
 
@@ -7,7 +8,7 @@ factor : (PLUS|MINUS) factor
 
 power : atom (POW factor)*
 
-factor : INT|FLOAT
+factor : INT|FLOAT|IDENTIFIER
        : LPAREN expr RPAREN
 
 PLUS : '+'
@@ -15,7 +16,10 @@ MINUS : '-'
 MUL : '*'
 DIV : '/'
 POW : '^'
+EQ  : '='
 INT : [0-9]+
 FLOAT : [0-9]*.[0-9]*
 LPAREN : '('
 RPAREN : ')'
+KEYWORD: 'VAR'
+IDENTIFIER: ASCII (ASCII|INT|'_')* 

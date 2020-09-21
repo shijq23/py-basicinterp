@@ -15,6 +15,21 @@ class NumberNode:
         return f'{self.tok}'
 
 
+class VarAccessNode:
+    def __init__(self, var_name_tok: Token) -> None:
+        self.var_name_tok = var_name_tok
+        self.pos_start = var_name_tok.pos_start
+        self.pos_end = var_name_tok.pos_end
+
+
+class VarAssignNode:
+    def __init__(self, var_name_tok: Token, value_node) -> None:
+        self.var_name_tok = var_name_tok
+        self.value_node = value_node
+        self.pos_start = var_name_tok.pos_start
+        self.pos_end = value_node.pos_end
+
+
 class BinOpNode:
     def __init__(self, left_node: NumberNode, op_tok: Token, right_node: NumberNode) -> None:
         self.left_node = left_node
