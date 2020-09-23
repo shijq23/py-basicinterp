@@ -5,7 +5,7 @@ from basiclang.rtresult import Number, RTResult
 import math
 from basiclang.context import Context
 from basiclang.error import Error, RTError
-from basiclang.token import TT_DIV, TT_MINUS, TT_MUL, TT_PLUS, TT_POW
+from basiclang.token import KEYWORDS, TT_DIV, TT_EE, TT_GT, TT_GTE, TT_KEYWORD, TT_LT, TT_LTE, TT_MINUS, TT_MUL, TT_NE, TT_PLUS, TT_POW
 
 from basiclang.position import Position
 from basiclang.node import BinOpNode, NumberNode, VarAccessNode, VarAssignNode
@@ -61,6 +61,22 @@ class Interpreter:
             result, error = left.div(right)
         elif node.op_tok.type == TT_POW:
             result, error = left.pow(right)
+        elif node.op_tok.type == TT_EE:
+            result, error = left.comp_eq(right)
+        elif node.op_tok.type == TT_NE:
+            result, error = left.comp_ne(right)
+        elif node.op_tok.type == TT_LT:
+            result, error = left.comp_lt(right)
+        elif node.op_tok.type == TT_GT:
+            result, error = left.comp_gt(right)
+        elif node.op_tok.type == TT_LTE:
+            result, error = left.comp_lte(right)
+        elif node.op_tok.type == TT_GTE:
+            result, error = left.comp_gte(right)
+        elif node.op_tok.matches(TT_KEYWORD, 'AND'):
+            result, error = left.and_(right)
+        elif node.op_tok.matches(TT_KEYWORD, 'OR'):
+            result, error = left.or_(right)
         else:
             pass
         if error:
@@ -73,8 +89,12 @@ class Interpreter:
         op = res.register(self.visit(node.node, context))
         if res.error:
             return res
+        err = None
         if node.op_tok.type == TT_MINUS:
             op, err = op.mul(Number(-1))
+        elif node.op_tok.matches(TT_KEYWORD, 'NOT'):
+            op, err = op.not_()
+
         if err:
             return res.failure(err)
         else:

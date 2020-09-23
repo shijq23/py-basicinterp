@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from __future__ import annotations
+import math
+
 from basiclang.error import Error, RTError
 
 from basiclang.context import Context
@@ -66,6 +68,41 @@ class Number:
                 return None, RTError(other.pos_start, other.pos_end, 'Division by zero', self.context)
             else:
                 return Number(self.value / other.value).set_context(self.context), None
+
+    def comp_eq(self, other) -> Number:
+        if isinstance(other, Number):
+            return Number(int(self.value == other.value)).set_context(self.context), None
+
+    def comp_ne(self, other) -> Number:
+        if isinstance(other, Number):
+            return Number(int(self.value != other.value)).set_context(self.context), None
+
+    def comp_lt(self, other) -> Number:
+        if isinstance(other, Number):
+            return Number(int(self.value < other.value)).set_context(self.context), None
+
+    def comp_gt(self, other) -> Number:
+        if isinstance(other, Number):
+            return Number(int(self.value > other.value)).set_context(self.context), None
+
+    def comp_lte(self, other) -> Number:
+        if isinstance(other, Number):
+            return Number(int(self.value <= other.value)).set_context(self.context), None
+
+    def comp_gte(self, other) -> Number:
+        if isinstance(other, Number):
+            return Number(int(self.value >= other.value)).set_context(self.context), None
+
+    def and_(self, other) -> Number:
+        if isinstance(other, Number):
+            return Number(int(self.value and other.value)).set_context(self.context), None
+
+    def or_(self, other) -> Number:
+        if isinstance(other, Number):
+            return Number(int(self.value or other.value)).set_context(self.context), None
+
+    def not_(self):
+        return Number(1 if self.value == 0 else 0).set_context(self.context), None
 
     def copy(self) -> Number:
         copy = Number(self.value)

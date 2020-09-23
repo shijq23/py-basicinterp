@@ -1,5 +1,10 @@
 expr : KEYWORD:VAR IDENTIFIER EQ expr
-     : term ((PLUS|MINUS) term)*
+     : comp-expr ((KEYWARD:AND|KEYWORD:OR) comp-expr) *
+
+comp-expr : NOT comp-expr
+          : arith-expr ((EE|LT|GT|LTE|GTE) arith-expr) *
+
+arith-expr : term ((PLUS|MINUS) term)*
 
 term : factor ((MUL|DIV) factor)*
 
@@ -17,9 +22,14 @@ MUL : '*'
 DIV : '/'
 POW : '^'
 EQ  : '='
+LT  : '<'
+GT  : '>'
+EE  : '=='
+LTE : '<='
+GTE : '>='
 INT : [0-9]+
 FLOAT : [0-9]*.[0-9]*
 LPAREN : '('
 RPAREN : ')'
-KEYWORD: 'VAR'
+KEYWORD: 'VAR'|'AND'|'OR'
 IDENTIFIER: ASCII (ASCII|INT|'_')* 

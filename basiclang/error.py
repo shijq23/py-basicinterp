@@ -28,6 +28,11 @@ class IllegalCharError(Error):
         super().__init__(pos_start, pos_end, 'Illegal Character', details)
 
 
+class ExpectedCharError(Error):
+    def __init__(self, pos_start: Position, pos_end: Position, details: str) -> None:
+        super().__init__(pos_start, pos_end, 'Expected Character', details)
+
+
 class InvalidSyntaxError(Error):
     def __init__(self, pos_start: Position, pos_end: Position, details: str) -> None:
         super().__init__(pos_start, pos_end, 'Invalid Syntax', details)
